@@ -1,0 +1,11 @@
+[book]
+title = "Bevy Coven"
+authors = ["Ladvien"]
+language = "en"
+src = "src"
+
+[output.html]
+default-theme = "coal"
+preferred-dark-theme = "coal"
+git-repository-url = "https://github.com/bevy-coven/bevy-coven.github.io"
+site-url = "/"

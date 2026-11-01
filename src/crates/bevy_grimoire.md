@@ -17,7 +17,7 @@ The editor is a program you run from a clone, on your game's project:
 ```sh
 git clone https://github.com/bevy-coven/bevy_grimoire
 cd bevy_grimoire
-cargo run -p bevy_grimoire_mapper -- /path/to/your/game
+cargo run -p bevy_cauldron -- /path/to/your/game
 ```
 
 Your game links only the libraries: `cargo add bevy_grimoire_core bevy_grimoire`. `bevy_grimoire_core` is engine-free and holds the grammar and the solvers; `bevy_grimoire` puts a library and a map into a Bevy world (`GrimoirePlugin`), and `GrimoireLivePlugin` reloads them while the game runs, so an edit shows up about a second later. A project from before the rename keeps its data in `assets/emerge`; the editor moves it to `assets/grimoire` the first time it opens the project.
@@ -27,7 +27,7 @@ Your game links only the libraries: `cargo add bevy_grimoire_core bevy_grimoire`
 - Maps built from kits: place, fill, turn, remove and undo ([building maps](https://github.com/bevy-coven/bevy_grimoire/blob/main/docs/guide/building-maps.md)).
 - Layouts learned from a corner you laid out and continued with wave function collapse, drawn before you keep them.
 - Kits and labels, with a vision model's proposals marked unchecked until you confirm them ([kits and labels](https://github.com/bevy-coven/bevy_grimoire/blob/main/docs/guide/kits-and-labels.md)).
-- The MCP server, `bevy_grimoire_mcp`, whose tools (`grimoire_state`, `grimoire_apply_operation`, captures, snips) let the Familiar read and drive the open editor ([MCP tools](https://github.com/bevy-coven/bevy_grimoire/blob/main/docs/mcp-tools.md)).
+- The MCP server, `bevy_cauldron_mcp`, whose tools (`grimoire_state`, `grimoire_apply_operation`, captures, snips) let the Familiar read and drive the open editor ([MCP tools](https://github.com/bevy-coven/bevy_grimoire/blob/main/docs/mcp-tools.md)).
 - Panels for the rest of the coven, each editing that crate's own settings ([using a crate in the Cauldron](../with-cauldron.md)).
 
 <a id="use-it-in-grimoire"></a>

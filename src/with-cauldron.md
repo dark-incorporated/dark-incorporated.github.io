@@ -3,7 +3,7 @@
 [The Cauldron](crates/bevy_grimoire.md) is the coven's editor, where the grimoire a game loads is written. It runs as its own program on your game's project, so the editor never becomes part of your game's build:
 
 ```sh
-cargo run -p bevy_grimoire_mapper -- <game-root> <map> --kit <kit>
+cargo run -p bevy_cauldron -- <game-root> <map> --kit <kit>
 ```
 
 With `--live`, every change is written through to disk as you make it, for a game that watches its own project.
@@ -22,4 +22,4 @@ When the editor needs something from a crate, the change is made in that crate's
 
 ## The Familiar
 
-The Cauldron's MCP server (`bevy_grimoire_mcp`) lets an agent, the Familiar, read the editor's state with `grimoire_state` and change a map with `grimoire_apply_operation`. Each crate's page says what its panel lets you, or the Familiar, change.
+The Cauldron's MCP server (`bevy_cauldron_mcp`) lets an agent, the Familiar, read the editor's state with `grimoire_state` and change a map with `grimoire_apply_operation`. Each crate's page says what its panel lets you, or the Familiar, change.

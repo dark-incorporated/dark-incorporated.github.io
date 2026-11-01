@@ -63,9 +63,10 @@ With the default `dialogue` feature, `DialoguePlugin` panics in `finish` without
 - **An economy and a save file.** Goods as quantities with a per-head price, sharing and swapping between people, and `capture`/`restore` of the whole society. [features](https://github.com/bevy-coven/bevy_society/blob/main/docs/guide/features.md#a-basic-economy) · [persistence](https://github.com/bevy-coven/bevy_society/blob/main/docs/guide/persistence.md)
 - **An editor's handles.** `fast_forward`, `preview_forward` (run a day, report what moved, put it back), `test_trigger`, `check_script`, `place_dependents` and `persons_in_rect`. [editor](https://github.com/bevy-coven/bevy_society/blob/main/docs/guide/editor.md)
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-Grimoire takes `bevy_society` as an optional cargo feature, named `bevy_society` in `Cargo.toml` and in a project's `family.ron`. When the project lists it, the editor:
+The Cauldron takes `bevy_society` as an optional cargo feature, named `bevy_society` in `Cargo.toml` and in a project's `family.ron`. When the project lists it, the editor:
 
 - **writes the crate's own settings** through `family_set`, which rewrites one dot-pathed field of the RON file the crate's serde types parse — the editor holds no schema for them, so it keeps the rest of the file as the author left it;
 - **refuses a definitions file the crate would reject**: a saved society definition goes through `bevy_society::SocietyDefs::from_ron` first, so a file the loader would not compile is never written;

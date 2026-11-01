@@ -1,6 +1,6 @@
-# Grimoire (`bevy_grimoire`)
+# Grimoire and the Cauldron (`bevy_grimoire`)
 
-The coven's editor, and its book of spells: a world editor for Bevy games where you build levels with an AI agent, the Familiar, working beside you. The Familiar changes a map only through the same named operations you use, its changes join your one undo history, and you show it what you mean by snipping a rectangle of the editor with a note.
+The grimoire is the book of spells a game loads (`bevy_grimoire` and `bevy_grimoire_core`). **The Cauldron is the coven's editor**, where you write it: a world editor for Bevy games where you build levels with an AI agent, the Familiar, working beside you. The Familiar changes a map only through the same named operations you use, its changes join your one undo history, and you show it what you mean by snipping a rectangle of the editor with a note.
 
 ![An agent turns the abbey 90 degrees and removes its table through MCP calls; the inspector names each change as the agent's, and two presses of Cmd+Z take them back](https://raw.githubusercontent.com/bevy-coven/bevy_grimoire/main/docs/media/agent-drives.gif)
 
@@ -28,11 +28,12 @@ Your game links only the libraries: `cargo add bevy_grimoire_core bevy_grimoire`
 - Layouts learned from a corner you laid out and continued with wave function collapse, drawn before you keep them.
 - Kits and labels, with a vision model's proposals marked unchecked until you confirm them ([kits and labels](https://github.com/bevy-coven/bevy_grimoire/blob/main/docs/guide/kits-and-labels.md)).
 - The MCP server, `bevy_grimoire_mcp`, whose tools (`grimoire_state`, `grimoire_apply_operation`, captures, snips) let the Familiar read and drive the open editor ([MCP tools](https://github.com/bevy-coven/bevy_grimoire/blob/main/docs/mcp-tools.md)).
-- Panels for the rest of the coven, each editing that crate's own settings ([using a crate with Grimoire](../with-grimoire.md)).
+- Panels for the rest of the coven, each editing that crate's own settings ([using a crate in the Cauldron](../with-cauldron.md)).
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-This is Grimoire. Every other crate's page says what Grimoire does with it.
+This is the Cauldron. Every other crate's page says what the Cauldron does with it.
 
 ## Links
 

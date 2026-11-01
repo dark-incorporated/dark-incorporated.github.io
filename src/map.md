@@ -2,11 +2,11 @@
 
 Every crate in the family, grouped by what it gives a game. Each picture plays from the crate's own repository.
 
-## The grimoire
+## The grimoire and the Cauldron
 
 ### [bevy_grimoire](crates/bevy_grimoire.md)
 
-An editor that learns a world's grammar from your example and builds more, with the Familiar beside you.
+The grimoire is what a game loads: a library of pieces and a map. The Cauldron is the editor that writes it: it learns a world's grammar from your example and builds more, with the Familiar beside you.
 
 ![An agent turns the abbey 90 degrees and removes its table through MCP calls; the inspector names each change as the agent's, and two presses of Cmd+Z take them back](https://raw.githubusercontent.com/bevy-coven/bevy_grimoire/main/docs/media/agent-drives.gif)
 

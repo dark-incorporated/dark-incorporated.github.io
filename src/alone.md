@@ -1,6 +1,6 @@
 # Using a crate on its own
 
-Every crate in the coven is a Bevy plugin plus its settings, and none of them needs Grimoire.
+Every crate in the coven is a Bevy plugin plus its settings, and none of them needs the Cauldron.
 
 1. Add it:
 

@@ -20,9 +20,10 @@ The [README](https://github.com/bevy-coven/bevy_stigmergy#quick-start) has a qui
 - `evaporate_diffuse_with`: the same tick split into chunks for your own thread pool, bit-identical to the inline one ([ticking](https://github.com/bevy-coven/bevy_stigmergy/blob/main/docs/guide/ticking.md)).
 - `serde` and `reflect` features on the settings types.
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-Grimoire takes this crate behind its `bevy_stigmergy` feature, for the **crowd preview** (issue #107): it walks N people from one area of a map to another with `bevy_orca`'s avoidance, and each lays a trail and a congestion mark into a `StigGrid` laid over the map with a `CellFrame`. The result is a measurement, not an edit: the two fields drawn as an overlay, how many walkers arrived, and where congestion peaks, so you can see where a gap between buildings jams before a game ships it. The settings it uses are the crate's own `ChannelDef`s, which are `Serialize`/`Deserialize` behind the `serde` feature.
+The Cauldron takes this crate behind its `bevy_stigmergy` feature, for the **crowd preview** (issue #107): it walks N people from one area of a map to another with `bevy_orca`'s avoidance, and each lays a trail and a congestion mark into a `StigGrid` laid over the map with a `CellFrame`. The result is a measurement, not an edit: the two fields drawn as an overlay, how many walkers arrived, and where congestion peaks, so you can see where a gap between buildings jams before a game ships it. The settings it uses are the crate's own `ChannelDef`s, which are `Serialize`/`Deserialize` behind the `serde` feature.
 
 ## Links
 

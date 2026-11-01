@@ -49,9 +49,10 @@ it, its sparks, smoke, tongues and bed of coals. Or run it first: `cargo run --r
 
 ![The six fire kinds, each one Fire component, with its flame, the pool its light throws on the ground, and its own sparks, smoke, tongues and coals](https://github.com/bevy-coven/bevy_lights/raw/HEAD/docs/media/fires.png)
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-Grimoire, the Coven's level editor, takes `bevy_lights` as an optional cargo feature (`bevy_lights`) and a
+The Cauldron, the Coven's level editor, takes `bevy_lights` as an optional cargo feature (`bevy_lights`) and a
 project lists it in its `family.ron`. Two things it does with the crate today:
 
 - **A placement's fire is the crate's own settings type.** `family_set` writes a field of the fire's

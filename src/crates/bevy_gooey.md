@@ -77,9 +77,10 @@ Or run the gallery first: `cargo run --example gallery`.
   the empty part of a `screen` is `Pickable::IGNORE`, so a click on the world under a HUD still
   reaches the world.
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-Grimoire, the Coven's level editor, takes `bevy_gooey` as an optional cargo feature (`bevy_gooey`) and
+The Cauldron, the Coven's level editor, takes `bevy_gooey` as an optional cargo feature (`bevy_gooey`) and
 a project lists it in its `family.ron`. It adds the crate's `GooeyStylePlugin` (not `GooeyNavPlugin`:
 the editor owns the arrow keys) and reads a project's skin from `<project>/family/bevy_gooey.ron`, which
 is the crate's own `GooeySkin` type written as RON — the same file a game ships:

@@ -9,3 +9,6 @@ default-theme = "coal"
 preferred-dark-theme = "coal"
 git-repository-url = "https://github.com/bevy-coven/bevy-coven.github.io"
 site-url = "/"
+
+[output.html.redirect]
+"/with-grimoire.html" = "/with-cauldron.html"

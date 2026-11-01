@@ -47,9 +47,10 @@ Or run it first: `cargo run --release --example quickstart`.
 - **Water that answers** — shallow-water hydrology with erosion, lakes and rivers, wakes from anything moving through: [rivers, lakes and waves](https://github.com/bevy-coven/bevy_elements/blob/main/docs/guide/water.md).
 - **A simulation gameplay can query** — ground height and normal, water depth and velocity, snow depth, cloud shadow, the lumens a night lamp needs: [gameplay queries](https://github.com/bevy-coven/bevy_elements/blob/main/docs/guide/queries.md).
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-Grimoire takes bevy_elements as the optional cargo feature `bevy_elements` (the volume snow feature builds on it as `volume_snow`), and its **map environment** panel edits this crate's own serde types, written to `<project>/family/bevy_elements.ron` so the editor's preview and the game read the same values:
+The Cauldron takes bevy_elements as the optional cargo feature `bevy_elements` (the volume snow feature builds on it as `volume_snow`), and its **map environment** panel edits this crate's own serde types, written to `<project>/family/bevy_elements.ron` so the editor's preview and the game read the same values:
 
 - `WorldClock`, `GeoLocation` and `Climate` — the date, the clock, where the observer stands and the climate the scheduler draws from.
 - `WeatherPreset` as `forced_weather` — `Some(Rain)` forces one preset and `None` releases the weather back to the climate's own schedule, so a map can be authored under a storm and played under whatever the season brings.

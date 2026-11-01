@@ -20,9 +20,10 @@ The [README](https://github.com/bevy-coven/bevy_orca#quick-start) has a single-a
 - `ObstaclesBuilder` for buildings, walls, polygons and tile maps, as RVO2's obstacle lines ([static obstacles](https://github.com/bevy-coven/bevy_orca/blob/main/docs/guide/obstacles.md)).
 - `serde` and `reflect` features on `Agent`, `CrowdMember` and `CrowdParams`.
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-Grimoire takes this crate behind its `bevy_orca` feature for the **crowd preview** (issue #107): it walks N people from one area of a map to another, each stepping with `bevy_orca`'s `Crowd` against its neighbours and against the cells the map's pieces make solid, and lays their trails and congestion into a `bevy_stigmergy` field. The editor draws the result over the map with how many arrived and where congestion peaks, and saves nothing to the map. The settings it passes are the crate's own `CrowdParams`, which are `Serialize`/`Deserialize` behind the `serde` feature.
+The Cauldron takes this crate behind its `bevy_orca` feature for the **crowd preview** (issue #107): it walks N people from one area of a map to another, each stepping with `bevy_orca`'s `Crowd` against its neighbours and against the cells the map's pieces make solid, and lays their trails and congestion into a `bevy_stigmergy` field. The editor draws the result over the map with how many arrived and where congestion peaks, and saves nothing to the map. The settings it passes are the crate's own `CrowdParams`, which are `Serialize`/`Deserialize` behind the `serde` feature.
 
 ## Links
 

@@ -20,9 +20,10 @@ The [README](https://github.com/bevy-coven/isomesh#quick-start) has a quick star
 - Validity and accuracy checks as public API: Euler characteristic, manifoldness, orientation, self-intersections, determinism, Hausdorff distance ([what gets checked](https://github.com/bevy-coven/isomesh/blob/main/docs/guide/checks.md)).
 - GPU extraction in `isomesh-gpu`, 37 times faster than the CPU at 129³ when the field is evaluated in the shader.
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-Grimoire takes `isomesh` for **carved volumes** (issue #101): a volume's edit list is the data, and the editor samples it over the ground one chunk at a time, each chunk sharing its boundary plane with its neighbour so the mesh has no cracks, and meshes it with `isomesh`. That is how caves, overhangs and tunnels a heightfield cannot hold get onto a map, and how `bevy_elements`' terrain gets them too.
+The Cauldron takes `isomesh` for **carved volumes** (issue #101): a volume's edit list is the data, and the editor samples it over the ground one chunk at a time, each chunk sharing its boundary plane with its neighbour so the mesh has no cracks, and meshes it with `isomesh`. That is how caves, overhangs and tunnels a heightfield cannot hold get onto a map, and how `bevy_elements`' terrain gets them too.
 
 ## Links
 

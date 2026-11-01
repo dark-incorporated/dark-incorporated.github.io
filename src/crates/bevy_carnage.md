@@ -19,9 +19,10 @@ The [README](https://github.com/bevy-coven/bevy_carnage#quick-start) has an 18-l
 - Seven kernels as modules: `bloodstain`, `wetmap`, `viscera`, `cross_section`, `flaymap`, `laceration` and `fracture_modes` ([the family](https://github.com/bevy-coven/bevy_carnage/blob/main/docs/guide/family.md)).
 - A recorded [gallery](https://github.com/bevy-coven/bevy_carnage/blob/main/docs/gallery.md) of every demo.
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-Grimoire takes this crate behind its `bevy_carnage` feature for **destructible props** (issue #108). `destructible_set` marks a piece destructible and fractures it once with the crate's own `fracture_mesh` over its mesh and a box proxy of its bounds, caching the chunks in the project (`destructible/<piece>.bake.ron`, keyed by the mesh's bytes and the cut settings, so it never bakes twice). `destructible_hit` previews a hit on the cached chunks and reports which break loose and whether each is a closed solid, by the crate's own audit. The violence dials are the crate's own `GorePolicy`, saved as `family/bevy_carnage.ron` through `family_set`; the editor itself ships no gore.
+The Cauldron takes this crate behind its `bevy_carnage` feature for **destructible props** (issue #108). `destructible_set` marks a piece destructible and fractures it once with the crate's own `fracture_mesh` over its mesh and a box proxy of its bounds, caching the chunks in the project (`destructible/<piece>.bake.ron`, keyed by the mesh's bytes and the cut settings, so it never bakes twice). `destructible_hit` previews a hit on the cached chunks and reports which break loose and whether each is a closed solid, by the crate's own audit. The violence dials are the crate's own `GorePolicy`, saved as `family/bevy_carnage.ron` through `family_set`; the editor itself ships no gore.
 
 ## Links
 

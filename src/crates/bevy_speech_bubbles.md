@@ -19,9 +19,10 @@ The [README](https://github.com/bevy-coven/bevy_speech_bubbles#quick-start) has 
 - A runtime driven by `StartConversation`, `ChoicePicked` and `ConversationEnded`, with `DialogueNodeEntered` for effects, and two presenters: balloons or the dialog box.
 - `Bark`s with `BarkSettings` pacing, and a 9-sliced `DialogSkin` with portrait, name tag and typewriter.
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-Grimoire takes this crate behind its `bevy_speech_bubbles` feature and keeps a project's dialogue as the crate's own `DialogueScript` in `family/bevy_speech_bubbles.ron`, with barks as `Vec<Bark>`. `family_set` writes them and runs `validate_script` before anything is saved, so a dangling `next` or a missing start node is refused with nothing written. `dialogue_preview` walks one path through a conversation, taking the options you name at each choice, and answers with the lines said, where the walk stopped and which nodes no path reaches, without changing a file. People placed with `bevy_society` speak these lines.
+The Cauldron takes this crate behind its `bevy_speech_bubbles` feature and keeps a project's dialogue as the crate's own `DialogueScript` in `family/bevy_speech_bubbles.ron`, with barks as `Vec<Bark>`. `family_set` writes them and runs `validate_script` before anything is saved, so a dangling `next` or a missing start node is refused with nothing written. `dialogue_preview` walks one path through a conversation, taking the options you name at each choice, and answers with the lines said, where the walk stopped and which nodes no path reaches, without changing a file. People placed with `bevy_society` speak these lines.
 
 ## Links
 

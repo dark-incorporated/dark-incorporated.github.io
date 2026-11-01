@@ -37,14 +37,15 @@ Then `cargo install bevy_fairy --no-default-features --features server` and regi
 - **Ask a person.** `guide` posts a script the game draws one step at a time, and each step moves on when a checkpoint the game registered passes — [the guide overlay](https://github.com/bevy-coven/bevy_fairy/blob/main/docs/guide/guide.md).
 - **Six worked sessions.** A value that stops changing, an entity in the wrong place, a capture with state beside it, a player's keystroke, a regression test that is a command, a reproduction walked through a person — [workflows](https://github.com/bevy-coven/bevy_fairy/blob/main/docs/guide/workflows.md).
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-Grimoire takes this crate as an optional dependency, `bevy_debugger_bevy` (the package is `bevy_fairy`), pinned to a git revision of `main` with `default-features = false, features = ["plugin", "plugin-guide", "plugin-screenshot"]`: the guide overlay, capture, and the injected cursor, and none of the server. With the feature off, `cargo tree -i bevy_debugger_bevy` finds no package and neither does `bevy_remote`.
+The Cauldron takes this crate as an optional dependency, `bevy_debugger_bevy` (the package is `bevy_fairy`), pinned to a git revision of `main` with `default-features = false, features = ["plugin", "plugin-guide", "plugin-screenshot"]`: the guide overlay, capture, and the injected cursor, and none of the server. With the feature off, `cargo tree -i bevy_debugger_bevy` finds no package and neither does `bevy_remote`.
 
 There is no settings panel for it, because there is nothing to author: the plugin has no file format of its own and no serde configuration. What it does in the editor is drive the editor.
 
-- **`DebuggerPlugin::default()`** is added in `harness.rs`, so the editor's own window answers `bevy_fairy/status`, `commands`, `input`, `screenshot`, `capture`, `guide` and `quit` at 127.0.0.1:15702. That is how an agent looks at Grimoire the way it looks at a game; it is on by default because the editor is not a build that ships to a player.
-- **`DebugCaptureTarget`** is inserted in `surface.rs` with the image the editor's camera renders to, so a `screenshot` of Grimoire is the editor's own interface — panes, tabs and all — captured offscreen, with the window behind another app or on another Space.
+- **`DebuggerPlugin::default()`** is added in `harness.rs`, so the editor's own window answers `bevy_fairy/status`, `commands`, `input`, `screenshot`, `capture`, `guide` and `quit` at 127.0.0.1:15702. That is how an agent looks at the Cauldron the way it looks at a game; it is on by default because the editor is not a build that ships to a player.
+- **`DebugCaptureTarget`** is inserted in `surface.rs` with the image the editor's camera renders to, so a `screenshot` of the Cauldron is the editor's own interface — panes, tabs and all — captured offscreen, with the window behind another app or on another Space.
 - **`DebugCommandsAppExt::add_debug_command`** in `ops_brp.rs` registers the editor's own verbs, so an agent finds them with `commands` and runs them with `run` with typed params and an example, rather than driving the UI blind.
 - **`Checkpoints` and `Guide`** in `guided.rs` and `chooser.rs` are what a guided run uses: each step names a condition the editor itself evaluates, so a script the agent posts advances when the author actually got there. `GuidePlacement` is `insert_resource`d at `top: 58.0` so the card sits below the title line rather than over the tab bar it describes.
 - **`cursor_position(&window, &DebugCursor)`** in `view.rs` is the one line an editor that reads the pointer itself has to write: the plugin injects a cursor instead of moving the real mouse, so a host reads through the plugin's function rather than `Window::cursor_position`.

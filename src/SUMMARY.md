@@ -4,7 +4,7 @@
 
 - [The map of the coven](map.md)
 - [Using a crate on its own](alone.md)
-- [Using a crate with Grimoire](with-grimoire.md)
+- [Using a crate in the Cauldron](with-cauldron.md)
 
 # The crates
 

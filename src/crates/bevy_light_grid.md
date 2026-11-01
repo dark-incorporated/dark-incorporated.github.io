@@ -21,9 +21,10 @@ The [README](https://github.com/bevy-coven/bevy_light_grid#quick-start) has a qu
 - `sample_cell` and `gradient_cell`, and `light_push_at` for a steering push up or down the gradient.
 - `Photophobic`, `Photophilic` and `Phototropic` markers, and `phototropic_scale` for growth toward light.
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-Grimoire takes this crate behind its `bevy_light_grid` feature for the **light map** (issue #103), a read-only operation and overlay. Every placement that carries a `bevy_lights` `Flicker` is a fixture, a placement whose descriptor is a wall blocks line of sight, and the values drawn over the map are the crate's own `LightGrid::sample_cell`, so what the author reads is what a light-shy creature in the game reads.
+The Cauldron takes this crate behind its `bevy_light_grid` feature for the **light map** (issue #103), a read-only operation and overlay. Every placement that carries a `bevy_lights` `Flicker` is a fixture, a placement whose descriptor is a wall blocks line of sight, and the values drawn over the map are the crate's own `LightGrid::sample_cell`, so what the author reads is what a light-shy creature in the game reads.
 
 ## Links
 

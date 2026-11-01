@@ -44,9 +44,10 @@ fn setup(mut commands: Commands) {
 - **Answers for the game.** `TreeShape` for colliders, `FloraIndex` (nearest tree, trees within a radius, the trunk a ray meets), `TreeCondition` for sick and dying trees, and what a save holds — [gameplay](https://github.com/bevy-coven/bevy_flora/blob/main/docs/guide/gameplay.md).
 - **Cameras.** `SeeThroughTrees` to keep the player visible, and orthographic cameras whose levels of detail follow the zoom — [cameras](https://github.com/bevy-coven/bevy_flora/blob/main/docs/guide/camera.md).
 
-## Use it in Grimoire
+<a id="use-it-in-grimoire"></a>
+## Use it in the Cauldron
 
-Grimoire takes this crate as the optional cargo feature `bevy_flora` (pinned to a git revision of `main`, with the crate's `ron` feature on). With the feature off, the two operations are still registered and refuse, naming the feature, so the editor's surface does not change with the build.
+The Cauldron takes this crate as the optional cargo feature `bevy_flora` (pinned to a git revision of `main`, with the crate's `ron` feature on). With the feature off, the two operations are still registered and refuse, naming the feature, so the editor's surface does not change with the build.
 
 Two operations, both writing files the game loads with the crate on its own:
 

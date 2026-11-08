@@ -2,13 +2,13 @@
 
 [Introduction](introduction.md)
 
-- [The map of the coven](map.md)
+- [The floor plan of Dark Inc.](map.md)
 - [Using a crate on its own](alone.md)
-- [Using a crate in the Cauldron](with-cauldron.md)
+- [Using a crate in the Dark Factory](with-dark-factory.md)
 
 # The crates
 
-- [bevy_grimoire](crates/bevy_grimoire.md)
+- [bevy_blueprint](crates/bevy_blueprint.md)
 - [bevy_elements](crates/bevy_elements.md)
 - [bevy_flora](crates/bevy_flora.md)
 - [isomesh](crates/isomesh.md)

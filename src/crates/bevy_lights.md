@@ -6,7 +6,7 @@ hands the budget out without a pop, modulates each light the way a fire's light 
 flame that motivates it — with sparks, smoke, tongues for a wide fire and a bed of coals that goes on
 glowing after the fire is put out.
 
-![Four braziers with real lights of their own and 48 torch-bearers sharing an 8-light pool, their flames leaning back as they walk](https://github.com/bevy-coven/bevy_lights/raw/HEAD/docs/media/showcase.gif)
+![Four braziers with real lights of their own and 48 torch-bearers sharing an 8-light pool, their flames leaning back as they walk](https://github.com/dark-incorporated/bevy_lights/raw/HEAD/docs/media/showcase.gif)
 
 ## Add it
 
@@ -39,20 +39,20 @@ it, its sparks, smoke, tongues and bed of coals. Or run it first: `cargo run --r
 
 ## What it gives you
 
-- **Fires that flicker, flare and go out** ([fires](https://github.com/bevy-coven/bevy_lights/blob/main/docs/guide/fires.md)): `Flicker` dips a light below its base at the rate its fuel bed sets, `Kindle` flares it up over 0.6 s, `Snuff` puts it out over 1.2 s with the linked flame.
-- **A budget of real lights for a town of thousands** ([the light pool](https://github.com/bevy-coven/bevy_lights/blob/main/docs/guide/light-pool.md)): ranked by the light each candidate puts on you, held with hysteresis, cross-faded on a hand-off, with a shadow budget of its own and one template that reaches every light live.
-- **The flame drawn where the fire is** ([shader flames](https://github.com/bevy-coven/bevy_lights/blob/main/docs/guide/flames.md)): one additive billboard per fire, breathing on its light's clock, in a hue of its own, shedding sparks, smoking, leaning in a wind and streaming behind a torch you carry — and going out when a wall hides its source.
-- **Coals that outlive the flame** ([the fuel bed](https://github.com/bevy-coven/bevy_lights/blob/main/docs/guide/fuel-bed.md)): a temperature field that breathes with the flicker, warms as the fire catches and cools over a minute once it is put out.
-- **A cinematographer's numbers** ([the lighting look](https://github.com/bevy-coven/bevy_lights/blob/main/docs/guide/lighting-look.md)): `fire_lumens`, `fill_for`, `blackbody_colour` and `white_balanced` turn "1000 lx at 4 m" and "1900 K" into a sized, coloured light.
-- **Every curve outside the engine** ([engine-free maths](https://github.com/bevy-coven/bevy_lights/blob/main/docs/guide/model.md)): the same maths as plain `f32` functions with no `bevy` in them, for a host that drives its own lights.
-- **What a host touches, and what it saves** ([host API](https://github.com/bevy-coven/bevy_lights/blob/main/docs/guide/host-api.md)): the components and resources a game spawns, marks and reads, and the `serde` feature that makes a placed fire one line of a scene file.
+- **Fires that flicker, flare and go out** ([fires](https://github.com/dark-incorporated/bevy_lights/blob/main/docs/guide/fires.md)): `Flicker` dips a light below its base at the rate its fuel bed sets, `Kindle` flares it up over 0.6 s, `Snuff` puts it out over 1.2 s with the linked flame.
+- **A budget of real lights for a town of thousands** ([the light pool](https://github.com/dark-incorporated/bevy_lights/blob/main/docs/guide/light-pool.md)): ranked by the light each candidate puts on you, held with hysteresis, cross-faded on a hand-off, with a shadow budget of its own and one template that reaches every light live.
+- **The flame drawn where the fire is** ([shader flames](https://github.com/dark-incorporated/bevy_lights/blob/main/docs/guide/flames.md)): one additive billboard per fire, breathing on its light's clock, in a hue of its own, shedding sparks, smoking, leaning in a wind and streaming behind a torch you carry — and going out when a wall hides its source.
+- **Coals that outlive the flame** ([the fuel bed](https://github.com/dark-incorporated/bevy_lights/blob/main/docs/guide/fuel-bed.md)): a temperature field that breathes with the flicker, warms as the fire catches and cools over a minute once it is put out.
+- **A cinematographer's numbers** ([the lighting look](https://github.com/dark-incorporated/bevy_lights/blob/main/docs/guide/lighting-look.md)): `fire_lumens`, `fill_for`, `blackbody_colour` and `white_balanced` turn "1000 lx at 4 m" and "1900 K" into a sized, coloured light.
+- **Every curve outside the engine** ([engine-free maths](https://github.com/dark-incorporated/bevy_lights/blob/main/docs/guide/model.md)): the same maths as plain `f32` functions with no `bevy` in them, for a host that drives its own lights.
+- **What a host touches, and what it saves** ([host API](https://github.com/dark-incorporated/bevy_lights/blob/main/docs/guide/host-api.md)): the components and resources a game spawns, marks and reads, and the `serde` feature that makes a placed fire one line of a scene file.
 
-![The six fire kinds, each one Fire component, with its flame, the pool its light throws on the ground, and its own sparks, smoke, tongues and coals](https://github.com/bevy-coven/bevy_lights/raw/HEAD/docs/media/fires.png)
+![The six fire kinds, each one Fire component, with its flame, the pool its light throws on the ground, and its own sparks, smoke, tongues and coals](https://github.com/dark-incorporated/bevy_lights/raw/HEAD/docs/media/fires.png)
 
-<a id="use-it-in-grimoire"></a>
-## Use it in the Cauldron
+<a id="use-it-in-blueprint"></a>
+## Use it in the Dark Factory
 
-The Cauldron, the Coven's level editor, takes `bevy_lights` as an optional cargo feature (`bevy_lights`) and a
+The Dark Factory, Dark Inc.'s level editor, takes `bevy_lights` as an optional cargo feature (`bevy_lights`) and a
 project lists it in its `family.ron`. Two things it does with the crate today:
 
 - **A placement's fire is the crate's own settings type.** `family_set` writes a field of the fire's
@@ -70,8 +70,8 @@ work, before the value reaches a light.
 
 ## Links
 
-- [Repository](https://github.com/bevy-coven/bevy_lights)
+- [Repository](https://github.com/dark-incorporated/bevy_lights)
 - [docs.rs](https://docs.rs/bevy_lights)
 - [crates.io](https://crates.io/crates/bevy_lights)
-- [CHANGELOG](https://github.com/bevy-coven/bevy_lights/blob/main/CHANGELOG.md)
-- [Capture recipes](https://github.com/bevy-coven/bevy_lights/blob/main/docs/DEMOS.md) · [every image in `docs/media/`](https://github.com/bevy-coven/bevy_lights/blob/main/docs/media/README.md)
+- [CHANGELOG](https://github.com/dark-incorporated/bevy_lights/blob/main/CHANGELOG.md)
+- [Capture recipes](https://github.com/dark-incorporated/bevy_lights/blob/main/docs/DEMOS.md) · [every image in `docs/media/`](https://github.com/dark-incorporated/bevy_lights/blob/main/docs/media/README.md)

@@ -1,6 +1,6 @@
 # Using a crate on its own
 
-Every crate in the coven is a Bevy plugin plus its settings, and none of them needs the Cauldron.
+Every crate in Dark Inc. is a Bevy plugin plus its settings, and none of them needs the Dark Factory.
 
 1. Add it:
 
@@ -11,7 +11,7 @@ Every crate in the coven is a Bevy plugin plus its settings, and none of them ne
    A crate that is not on crates.io yet (`bevy_light_grid`) is a git dependency:
 
    ```toml
-   bevy_light_grid = { git = "https://github.com/bevy-coven/bevy_light_grid" }
+   bevy_light_grid = { git = "https://github.com/dark-incorporated/bevy_light_grid" }
    ```
 
 2. Add its plugin to your app:

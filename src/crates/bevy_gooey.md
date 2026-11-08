@@ -6,7 +6,7 @@ navigation, built on Bevy's own headless widgets (`bevy_ui_widgets`) and input f
 keyboard reaches everything a mouse does — with the WCAG 2.2 contrast and target-size checks the crate
 runs on your own skin.
 
-![Walking a menu with the keyboard: focus moves down the panel onto Options, the health meter drains, then the Load game list scrolls to follow focus and a toast appears](https://github.com/bevy-coven/bevy_gooey/raw/HEAD/docs/media/gallery.gif)
+![Walking a menu with the keyboard: focus moves down the panel onto Options, the health meter drains, then the Load game list scrolls to follow focus and a toast appears](https://github.com/dark-incorporated/bevy_gooey/raw/HEAD/docs/media/gallery.gif)
 
 ## Add it
 
@@ -50,37 +50,37 @@ Or run the gallery first: `cargo run --example gallery`.
 
 ## What it gives you
 
-- **A skin as data** ([skins](https://github.com/bevy-coven/bevy_gooey/blob/main/docs/research/gooey.md)):
+- **A skin as data** ([skins](https://github.com/dark-incorporated/bevy_gooey/blob/main/docs/research/gooey.md)):
   `GooeySkin` holds every colour and size, with the `dark` and `parchment` presets and `problems()`,
   which checks WCAG 2.2 contrast and target size. Change it and everything restyles that frame. Fonts
   live in `GooeyFonts`, never in the skin.
-- **Every widget a game screen needs** ([the widget set](https://github.com/bevy-coven/bevy_gooey/blob/main/docs/research/gooey.md)):
+- **Every widget a game screen needs** ([the widget set](https://github.com/dark-incorporated/bevy_gooey/blob/main/docs/research/gooey.md)):
   `screen`, `panel`, `menu`, `heading`, `label`, `button`, `meter` (a HUD bar), `toggle`, `choice`,
   `slider`, `list`, `toast`, `toast_alert`, `Tooltip` and the modal `dialog` — each a free function
   returning a bundle, so they compose in `children![]` and with `observe`.
-- **Settings controls that are the widget** ([controls](https://github.com/bevy-coven/bevy_gooey/blob/main/docs/research/controls.md)):
+- **Settings controls that are the widget** ([controls](https://github.com/dark-incorporated/bevy_gooey/blob/main/docs/research/controls.md)):
   a `toggle`, `choice` and `slider` each root on Bevy's own `Checkbox`, `Button` and `Slider`, so the
   entity you spawn carries the value, takes `observe` and says each change once in `ValueChange`.
-- **A list that scrolls and follows focus** ([lists](https://github.com/bevy-coven/bevy_gooey/blob/main/docs/research/list.md)):
+- **A list that scrolls and follows focus** ([lists](https://github.com/dark-incorporated/bevy_gooey/blob/main/docs/research/list.md)):
   `list(4.5, children![..])` shows four rows and a half, cuts the fifth so the player sees there is
   more, and keeps the next row in sight as the arrows walk down it.
-- **Navigation with no mode to enter** ([focus](https://github.com/bevy-coven/bevy_gooey/blob/main/docs/research/focus.md)):
+- **Navigation with no mode to enter** ([focus](https://github.com/dark-incorporated/bevy_gooey/blob/main/docs/research/focus.md)):
   arrows and the D-pad move focus to the nearest widget, Enter, Space and South activate, Tab cycles,
   an open dialog holds focus, and the focus ring appears the moment a key is pressed.
-- **Toasts that read at the player's pace** ([toasts](https://github.com/bevy-coven/bevy_gooey/blob/main/docs/research/toast.md)):
+- **Toasts that read at the player's pace** ([toasts](https://github.com/dark-incorporated/bevy_gooey/blob/main/docs/research/toast.md)):
   `commands.spawn(toast("Game saved"))` and it stacks, times itself to its own length and ages on real
   time, so a paused game's menu still lets it go.
-- **One interface at every resolution** ([scale](https://github.com/bevy-coven/bevy_gooey/blob/main/docs/research/scale.md)):
+- **One interface at every resolution** ([scale](https://github.com/dark-incorporated/bevy_gooey/blob/main/docs/research/scale.md)):
   `GooeyScalePlugin` keeps the skin's sizes the same share of the screen, and every border is a whole
   number of device pixels at any scale.
-- **A pointer that passes through a HUD** ([over a game world](https://github.com/bevy-coven/bevy_gooey/blob/main/docs/research/pointer.md)):
+- **A pointer that passes through a HUD** ([over a game world](https://github.com/dark-incorporated/bevy_gooey/blob/main/docs/research/pointer.md)):
   the empty part of a `screen` is `Pickable::IGNORE`, so a click on the world under a HUD still
   reaches the world.
 
-<a id="use-it-in-grimoire"></a>
-## Use it in the Cauldron
+<a id="use-it-in-blueprint"></a>
+## Use it in the Dark Factory
 
-The Cauldron, the Coven's level editor, takes `bevy_gooey` as an optional cargo feature (`bevy_gooey`) and
+The Dark Factory, Dark Inc.'s level editor, takes `bevy_gooey` as an optional cargo feature (`bevy_gooey`) and
 a project lists it in its `family.ron`. It adds the crate's `GooeyStylePlugin` (not `GooeyNavPlugin`:
 the editor owns the arrow keys) and reads a project's skin from `<project>/family/bevy_gooey.ron`, which
 is the crate's own `GooeySkin` type written as RON — the same file a game ships:
@@ -105,8 +105,8 @@ serde data, so each is one line of the project's `family/` folder.
 
 ## Links
 
-- [Repository](https://github.com/bevy-coven/bevy_gooey)
+- [Repository](https://github.com/dark-incorporated/bevy_gooey)
 - [docs.rs](https://docs.rs/bevy_gooey)
 - [crates.io](https://crates.io/crates/bevy_gooey)
-- [CHANGELOG](https://github.com/bevy-coven/bevy_gooey/blob/main/CHANGELOG.md)
-- [Every image in `docs/media/`](https://github.com/bevy-coven/bevy_gooey/blob/main/docs/media/README.md)
+- [CHANGELOG](https://github.com/dark-incorporated/bevy_gooey/blob/main/CHANGELOG.md)
+- [Every image in `docs/media/`](https://github.com/dark-incorporated/bevy_gooey/blob/main/docs/media/README.md)

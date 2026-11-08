@@ -55,10 +55,10 @@ it, its sparks, smoke, tongues and bed of coals. Or run it first: `cargo run --r
 The Dark Factory, Dark Inc.'s level editor, takes `bevy_lights` as an optional cargo feature (`bevy_lights`) and a
 project lists it in its `family.ron`. Two things it does with the crate today:
 
-- **A placement's fire is the crate's own settings type.** `family_set` writes a field of the fire's
-  `Flicker` — `base`, `phase`, `depth`, `diameter` — in `<project>/family/bevy_lights.ron`, and the placed
-  prop reads back as the crate's `Flicker`, so the editor has no schema of its own for it.
-  `placement_set_family` puts that value on one placement, or takes it off.
+- **A placement's fire is the crate's own component.** A piece carries a `Fire` or a `Flicker` in its
+  map row under the component's type path (`bevy_lights::fire::Fire`), as RON the crate's own type reads,
+  so the editor has no schema of its own for it. `placement_set_component` puts that value on one
+  placement, or takes it off, and the game's `bevy_blueprint` spawner inserts it by reflection.
 - **Two read-only operations answer "which of my torches are real, and how lit is this tile?"** — `light_pool`
   runs the crate's own `LightPoolPlugin` over the map's fixtures and reads its `PoolBudget` for where the
   viewer stands, and `light_map` bakes a `bevy_light_grid` illuminance field from the same fixtures.

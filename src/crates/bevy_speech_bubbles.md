@@ -22,7 +22,7 @@ The [README](https://github.com/dark-incorporated/bevy_speech_bubbles#quick-star
 <a id="use-it-in-blueprint"></a>
 ## Use it in the Dark Factory
 
-The Dark Factory takes this crate behind its `bevy_speech_bubbles` feature and keeps a project's dialogue as the crate's own `DialogueScript` in `family/bevy_speech_bubbles.ron`, with barks as `Vec<Bark>`. `family_set` writes them and runs `validate_script` before anything is saved, so a dangling `next` or a missing start node is refused with nothing written. `dialogue_preview` walks one path through a conversation, taking the options you name at each choice, and answers with the lines said, where the walk stopped and which nodes no path reaches, without changing a file. People placed with `bevy_society` speak these lines.
+The Dark Factory takes this crate behind its `bevy_speech_bubbles` feature and keeps a project's dialogue as the crate's own `DialogueScript` in `family/bevy_speech_bubbles/DialogueScript.ron`, and a piece carries the conversation it starts as the component `StartsConversation`. `family_set` writes the script and runs `validate_script` before anything is saved, so a dangling `next` or a missing start node is refused with nothing written. `dialogue_preview` walks one path through a conversation, taking the options you name at each choice, and answers with the lines said, where the walk stopped and which nodes no path reaches, without changing a file. People placed with `bevy_society` speak these lines.
 
 ## Links
 

@@ -82,8 +82,8 @@ Or run the gallery first: `cargo run --example gallery`.
 
 The Dark Factory, Dark Inc.'s level editor, takes `bevy_gooey` as an optional cargo feature (`bevy_gooey`) and
 a project lists it in its `family.ron`. It adds the crate's `GooeyStylePlugin` (not `GooeyNavPlugin`:
-the editor owns the arrow keys) and reads a project's skin from `<project>/family/bevy_gooey.ron`, which
-is the crate's own `GooeySkin` type written as RON — the same file a game ships:
+the editor owns the arrow keys) and reads a project's skin from `<project>/family/bevy_gooey/GooeySkin.ron`,
+which is the crate's own `GooeySkin` type written as RON — the same file a game ships:
 
 ```ron
 (accent: Srgba((red: 0.2, green: 0.6, blue: 0.9, alpha: 1.0)), text_scale: 1.25)
@@ -95,13 +95,10 @@ every widget that frame; a file that is not a skin is a problem on the status li
 skin stays; a skin that breaks the crate's own rules is applied and each broken rule
 (`GooeySkin::problems()`) is a problem. Removing the file puts the default skin back.
 
-There is no panel for the skin yet. One would edit `GooeySkin`'s fields — the colours (`background`,
-`surface`, `surface_raised`, `text`, `text_muted`, `accent`, `accent_text`, `danger`, `focus_ring`,
-`outline`, `scrim`), the sizes (`text_size`, `heading_size`, `gap`, `padding`, `radius`, `border`,
-`meter_height`, `min_target`) and the player's `text_scale` — with `problems()` listed beside them, and
-it would read `UiScaleSettings { reference_short_side, scale }` and `ToastSettings { anchor,
-max_visible, base_seconds, chars_per_second, duration_scale, fade_seconds }` the same way: each is
-serde data, so each is one line of the project's `family/` folder.
+The Plugins door edits the skin in a reflect inspector, and every other settings resource the crate
+registers the same way (`UiScaleSettings`, `ToastSettings`, `MotionSettings` and the rest): each is one
+file, `family/bevy_gooey/<Type>.ron`, applied to the running resource by reflection in the editor and in a
+game that adds `BlueprintLivePlugin`.
 
 ## Links
 

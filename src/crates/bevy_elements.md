@@ -50,12 +50,12 @@ Or run it first: `cargo run --release --example quickstart`.
 <a id="use-it-in-blueprint"></a>
 ## Use it in the Dark Factory
 
-The Dark Factory takes bevy_elements as the optional cargo feature `bevy_elements` (the volume snow feature builds on it as `volume_snow`), and its **map environment** panel edits this crate's own serde types, written to `<project>/family/bevy_elements.ron` so the editor's preview and the game read the same values:
+The Dark Factory takes bevy_elements as the optional cargo feature `bevy_elements` (the volume snow feature builds on it as `volume_snow`), and its **map environment** panel edits this crate's own settings resources, one file each in `<project>/family/bevy_elements/<Type>.ron`, so the editor's preview and the game read the same values:
 
 - `WorldClock`, `GeoLocation` and `Climate` — the date, the clock, where the observer stands and the climate the scheduler draws from.
-- `WeatherPreset` as `forced_weather` — `Some(Rain)` forces one preset and `None` releases the weather back to the climate's own schedule, so a map can be authored under a storm and played under whatever the season brings.
+- `WeatherOverrideSettings` — `preset: Some(Rain)` forces one preset and `None` releases the weather back to the climate's own schedule, so a map can be authored under a storm and played under whatever the season brings.
 - `SnowSettings`, `WetnessSettings`, `RockSettings` and `DustSettings` — how the snow settles, drifts and melts; how the ground wets and puddles; how many rocks lie on the ground; how the sand moves.
-- `SurfaceCover` as `volume_cover` — a fixed snow and wetness a carved `bevy_isomesh` volume wears whatever the weather is, which is what a preview of a snow-capped cliff needs.
+- A carved `bevy_isomesh` volume's cover — a fixed snow and wetness it wears whatever the weather is, kept on the map's volume and drawn as this crate's `SurfaceCover`, which is what a preview of a snow-capped cliff needs.
 
 The editor also builds a map's heightfield from `ProceduralTerrain`'s presets (`hills`, `mountains`, `dunes`, `plains`) and puts `bevy_elements`' `SnowyField` over a carved volume. Nothing outside those types is reachable from the editor yet: `EnvironmentSetup` and `SurfaceSetup` — the whole sky-and-ground setup as one saved, validated value that applies live — are the natural next panel, and the terrain's `TerrainSetup`, `SculptTerrain` and `RestoreTerrain` would give it sculpting and undo.
 

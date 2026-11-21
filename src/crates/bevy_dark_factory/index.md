@@ -6,7 +6,7 @@ The grimoire is the book of spells a game loads (`bevy_grimoire` and `bevy_grimo
 
 ## The demo
 
-<video controls preload="none" poster="../media/bevy_grimoire-demo.png" src="../media/bevy_grimoire-demo.mp4" width="100%"></video>
+<video controls preload="none" poster="/media/bevy_grimoire-demo.png" src="/media/bevy_grimoire-demo.mp4" width="100%"></video>
 
 64 seconds on a walled map: the agent frames two wall pieces, turns `wall_02_2` to 90 degrees and removes `wall_02_3`; the person's Cmd+Z reports `put back wall_02_3`. It ends with a snip: the person drags a box over the walled cluster, writes a note, and the receipt names the PNG it saved.
 
@@ -28,7 +28,7 @@ Your game links only the libraries: `cargo add bevy_grimoire_core bevy_grimoire`
 - Layouts learned from a corner you laid out and continued with wave function collapse, drawn before you keep them.
 - Kits and labels, with a vision model's proposals marked unchecked until you confirm them ([kits and labels](https://github.com/bevy-coven/bevy_grimoire/blob/main/docs/guide/kits-and-labels.md)).
 - The MCP server, `bevy_cauldron_mcp`, whose tools (`grimoire_state`, `grimoire_apply_operation`, captures, snips) let the Familiar read and drive the open editor ([MCP tools](https://github.com/bevy-coven/bevy_grimoire/blob/main/docs/mcp-tools.md)).
-- Panels for the rest of the coven, each editing that crate's own settings ([using a crate in the Cauldron](../with-cauldron.md)).
+- Panels for the rest of the coven, each editing that crate's own settings ([using a crate in the Cauldron](../../with-cauldron.md)).
 
 <a id="use-it-in-grimoire"></a>
 ## Use it in the Cauldron

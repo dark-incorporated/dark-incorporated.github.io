@@ -1,0 +1,10 @@
+{
+ "sha": "424369c6a6da124d55864dad3546e4b3f1ce4b8a",
+ "files": {
+  "one-agent.md": "7c21354034a9ddec8fc324df9dfccbff8c6a8ce42c7ce2faa1366a295a290be7",
+  "crowd.md": "86e2b75d0f19ae20708b54bdb2c5e60e395e6896797af6a1000dd4c009ceed99",
+  "obstacles.md": "6ce82677f27916e0ebbcacca82a444cbdf2eb0b443af50d1826e4cc2f277604a",
+  "units-and-determinism.md": "04044e91b8304cefa576cca147397b4a8d89ee8e8afc21cec8cd80d9a3affcab",
+  "examples.md": "83128f587fac89812c675ad7d184ff5c2478bca396158429a3a9a8ff4a8b1613"
+ }
+}

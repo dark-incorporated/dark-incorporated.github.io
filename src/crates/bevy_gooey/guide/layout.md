@@ -1,0 +1,351 @@
+<!-- synced from dark-incorporated/bevy_gooey@6135378; edit it there -->
+# Layout primitives
+
+Five widgets (and `row_with`, `column_with` and `button_row`) that lay a panel out without a `Node` literal anywhere in the caller: `row(gap)`, `column(gap)`, `cell(width)`, `image_box(handle, size)` and `overlay()`.
+
+```rust
+use bevy::prelude::*;
+use bevy_gooey::*;
+
+fn bench(mut commands: Commands, plot: Handle<Image>, hover: Handle<Image>) {
+    commands.spawn((
+        panel(),
+        children![
+            heading("Rig bench"),
+            (row(1.0), children![
+                (cell(7.0), children![label("0 - clip 14")]),
+                (overlay(), children![
+                    image_box(plot.clone(), Vec2::new(320.0, 160.0)),
+                    image_box(hover.clone(), Vec2::new(320.0, 160.0)),
+                ]),
+                label("free x1.00"),
+            ]),
+            (row(1.0), children![
+                (cell(7.0), children![label("1 - clip 2")]),
+                image_box(plot, Vec2::new(320.0, 160.0)),
+                label("gait x1.00"),
+            ]),
+        ],
+    ));
+}
+```
+
+Their spacing is the skin's, so a step of `GooeySkin::text_scale` or a theme change moves all of it.
+
+| primitive | what it is |
+|---|---|
+| `row(gap)` | a flex row whose children stand `gap` multiples of `GooeySkin::gap` apart; `row(0.0)` is flush |
+| `column(gap)` | a stack of rows, the same gap between them; its children stretch to its width |
+| `cell(width)` | a box `width` **body text sizes** wide, so a label column lines up down a list of readings; what does not fit is cut. A width of 0 is not shown at all: no room, no gap |
+| `image_box(handle, size)` | a picture of `size` logical px, whatever the image is: a plot being written keeps its room, an image that has not loaded draws nothing and still holds the box |
+| `overlay()` | a box its first child sizes, with every later child stacked over it filling it |
+
+## How a row lays out
+
+`row(gap)` and `column(gap)` take a gap only. What else a container does, which way its children stand across it, whether a full line wraps, how they share the rest and whether the container itself shrinks, is a `RowLayout`. Each field is an `Option`: `None` leaves what the role gives the node (a `button_row` keeps its centring and its wrapping when you set only `justify`), `Some` writes it:
+
+```rust
+use bevy::prelude::*;
+use bevy_gooey::*;
+
+fn settings_row(mut commands: Commands) {
+    commands.spawn((
+        row_with(
+            1.0,
+            RowLayout {
+                align: Some(AlignItems::Center),
+                wrap: Some(FlexWrap::Wrap),
+                justify: Some(JustifyContent::SpaceBetween),
+                shrink: Some(0.0), // a rigid row: it keeps its size when its host squeezes
+                ..default()
+            },
+        ),
+        children![label("Modified; without it the chord is Ctrl+S"), button("Reset")],
+    ));
+    // The same component on a plain row, so it works in a bundle or a `Children::spawn(SpawnWith(..))`.
+    commands.spawn((row(1.0), RowLayout { align: Some(AlignItems::Center), ..default() }));
+    // A line of buttons with a tight gap: centred, wrapping a gap below when the room runs out.
+    commands.spawn((button_row(0.5), children![button("PLAY"), button("BUILD")]));
+}
+```
+
+`fill_column(gap)` is a column that takes the room its row leaves and can narrow to zero (`flex_grow` 1, `min_width` 0): beside a fixed picture or a `count_text`, the text in it wraps inside it and never pushes the row out (`fill_text` is the same for one text; this holds several parts).
+
+`fill_region()` is its twin on the height axis (`flex_grow` 1, `min_height` 0) for what holds a tree or a list: a region of a column that takes the height its siblings leave and can shrink to nothing, so a tall tree scrolls inside it and never makes its host taller.
+
+`sized_panel(CardWidth::Px(520.0))` (or `CardWidth::Text(30.0)`, in body text sizes) is a `panel()` with a width of its own: a dialog's card, or a form on a screen, that is not 21 to 36 text sizes. It is never wider than the room it stands in (a dialog's card: the window less the scrim's 5% on each side) and has no least width.
+
+`placed_at(30.0, 40.0)` puts a node that many px in from its host's top left corner, `placed(UiRect { right: .., bottom: .., ..UiRect::all(Val::Auto) })` at any corner or edge, and `cover()` fills its host: all absolute, so they take no room in the flow and the host's other children stay where they were, and `Pickable::IGNORE`, so the pointer goes through (`insert(Pickable::default())` for one that must take it). A node that follows a point **in the world** (a balloon, a label on a map area, a badge on a mesh) is not this: it is a [`WorldAnchor`](world-anchor.md).
+
+`status_mark()` is the dot at the start of a status item on its own: put a `StatusKind` on the row it stands in and it is the accent for a warning, the danger colour for an error and gone for information. `plain_button("Cancel")` is a button's fill, frame, height and hover with none of its behaviour (no Bevy `Button`): no `Activate`, no tab stop, no pressed state; listen for `PointerClick` yourself.
+
+`aspect_image(handle, 480.0, 16.0 / 9.0)` is a picture sized by its ratio: 480 px wide while its host has the room, no wider than the host when it does not, its height following (`image_box` is a fixed size that never gives way).
+
+`RowLayout` is written **only when it is on the node**: a plain `row(1.0)` keeps a `Node` field you patched yourself. A wrapping container puts the skin's gap between its lines as well as between its children. `column_with(gap, layout)` is the same for a column (`align` is across its width).
+
+## Room in the skin's steps
+
+`Spacing` is margin and padding in steps of `GooeySkin::spacing`, on any node that has a `Role`:
+
+```rust
+use bevy::prelude::*;
+use bevy_gooey::*;
+
+fn section(mut commands: Commands) {
+    commands.spawn((
+        label("Section"),
+        // A step of the skin's scale under the text; a side left `None` leaves the node alone.
+        Spacing {
+            margin: Sides { bottom: Some(Space::Step(2)), ..default() },
+            padding: Sides::default(),
+        },
+    ));
+    // A padded column; `Space::Zero` is how to ask for none where a role gives some.
+    commands.spawn((column(0.0), Spacing { padding: Sides::all(Space::Step(1)), ..default() }));
+}
+```
+
+A side that is set wins over the role's own (a `panel`'s padding); the unit is the skin's step, so a theme or a skin change moves all of it.
+
+## A spacer, a gap, a hidden page
+
+`spacer()` takes what its row or column leaves: `children![button("Back"), spacer(), button("Next")]` puts one button at each end, and two spacers centre what stands between them. `fill_region_with(gap)` is a `fill_region()` whose children stand `gap` skin gaps apart, and `Shown(false)` hides it through the skin (`Display::None` and `Visibility::Hidden`: the page takes no room, what follows closes up, and nothing in it is a tab stop or an open dialog):
+
+```rust
+use bevy::prelude::*;
+use bevy_gooey::*;
+
+fn pages(mut commands: Commands) {
+    commands.spawn((row(1.0), children![button("Back"), spacer(), button("Next")]));
+    commands.spawn((fill_region_with(1.0), Shown(false), children![heading("Home"), label("Recent")]));
+}
+```
+
+Set `Shown(true)` to bring the page back: it gets back the display and visibility it had.
+
+## Size and shape
+
+`Sizing` is a width and a height (px, a percentage of the host, or body text sizes), their least and greatest, and a clip; `Shape` is a border per side in the skin's line weights, its colour, a corner radius and a fill. Both go on any node, every field is an `Option`, a field left `None` leaves the node alone, and `sized(sizing)` is a plain box that carries a `Sizing`:
+
+```rust
+use bevy::prelude::*;
+use bevy_gooey::*;
+
+fn chip(mut commands: Commands) {
+    commands.spawn((
+        placed_at(30.0, 40.0),
+        Sizing { width: Some(Extent::Px(120.0)), height: Some(Extent::Px(60.0)), ..default() },
+        Shape { border: Sides::all(1.0), ink: Some(Ink::Accent), radius: Some(Radius::Step(1)), fill: Some(1) },
+        RowLayout { direction: Some(FlexDirection::Row), ..default() },
+        children![label("Look"), label("Free")],
+    ));
+}
+```
+
+A rail is a border on one side (`Sides { right: Some(1.0), ..default() }`); a pill is `Radius::Full`. A shape with only a radius leaves a button's own fill and edge.
+
+## A text with its own flex
+
+`TextFlow` says how a text takes part in its row: `shrink: Some(0.0)` keeps its words' width, `grow: Some(1.0)` with `min_width: Some(Extent::Px(0.0))` is a title that takes what is left and may narrow to nothing, `align` is where it stands across the row. `label_with(text, flow)` and `fill_text_with(text, flow)` carry it; a field left `None` leaves the role's own.
+
+## A list row, and the editor's chrome from these parts
+
+`list_row()` is a selectable full-width row of a list: Bevy's `Selected` on it lights a rail on its left in the accent and raises its fill, and nothing moves because the rail's width is always reserved. `quiet_list_row()` looks the same and is not on the `Activate` bus. **A row is rigid** (`flex_shrink: 0`): it keeps the height its own words need, so a `fill_text` that wraps to two or four lines makes the row taller, and in a `scroll_viewport` whose rows overflow it the row is never pressed back down to its `min_height` (where its text would be drawn over the rows before and after it). The viewport scrolls; the rows keep their size.
+
+```rust
+use bevy::prelude::*;
+use bevy_gooey::*;
+
+fn files(mut commands: Commands) {
+    commands.spawn((column(0.0), children![
+        (list_row(), bevy::ui::Selected, children![fill_text("agent_view.rs"), count_text("12")]),
+        (list_row(), children![fill_text("chrome.rs"), count_text("3")]),
+    ]));
+}
+```
+
+A tool's frame is built from the parts above: a `sized(100% x 100%)` frame, a bar, a body (`fill_region()` with `RowLayout { direction: Some(FlexDirection::Row), .. }`), docks as `sized(width)` (hide one with `Shown(false)`), a viewport slot as `fill_column`, a band as `status_bar`. **Every box between a tall list and the window needs `min_height` 0** (`Sizing { min_height: Some(Extent::Px(0.0)), .. }`, the window's root too): a flex item's automatic minimum is its content, and a tall child would hold the whole chain open. A modal is `dialog()` + `Shown(false)` + `sized_panel`; a severity rail is a `column` with a `Shape` border on its left and a `Spacing`. The mapping, builder by builder, is in `docs/research/layout-more.md`.
+
+## Spacing off the scale
+
+`Space::Px(6.0)` is a literal logical px for the measures that are not on the skin's spacing scale (a chip's `6 x 3`, a tab's `12 x 8`): `Spacing { padding: Sides { left: Some(Space::Px(6.0)), .. }, .. }`. It is written by the skin and finite-checked (below zero is zero, not a number leaves the side alone) but does not follow the scale or the text size: prefer a `Step`.
+
+## Viewport lengths
+
+`Extent::Vh(100.0)` is the window's whole height and `Extent::Vw(50.0)` half its width, whatever the host is (`VMin` and `VMax` are the smaller and larger side): the root of a window-sized frame. Like every extent it is finite-checked and never negative. Remember `min_height` 0 down the chain.
+
+## Which borders snap
+
+Every border the skin draws is a whole number of device pixels (a 2 px line at 1.25x is 2 device px, 1.6 logical): the frame of every widget, the focus ring, an edge tab's edge, and a `Shape` border weight. **`BorderPx(Sides::all(3.0))` is not snapped**: it is the logical px it says, for a drag box or a pick outline whose width is the requirement (Bevy's layout still rounds it to its own device pixels). A border you write on a `Node` yourself is left alone unless a `Shape` or `BorderPx` names that side.
+
+## A button that holds your children
+
+`button_box()` is a focusable button (`Activate`, hover, press, focus ring, a tab stop) that holds whatever you put in it and puts `Role::ButtonText` on none of it: a card with a picture, two texts and a badge. Use `fill_text` and `count_text` for words that follow its state; a `RowLayout` beside it sets `justify`, `align` or `direction`.
+
+## A quiet status item you can hide
+
+`status_item_quiet("Jobs")` is a status item that is not on the `Activate` bus (no `Button`, no tab stop). `Shown(false)` hides it (no room, no focus) and `Shown(true)` brings it back; to toggle a node that already exists, insert or change its `Shown`: never write `Node::display`.
+
+## Your own colours on one node
+
+`InkOverride { fill, ink, edge }` replaces the fill, the text colour and the edge colour of that node for any role; a field left `None` keeps the role's, a skin change does not overwrite it, and a focused widget's ring still wins over the edge. It does not cascade: give each text its own `ink`.
+
+## Geometry a system writes every frame
+
+Writing `PlacedAt` or `Sizing` every frame makes the skin restyle the node every frame: about two thirds more per frame than writing `Node`, measured for 500 nodes. Write them **only for the nodes that moved and only when the value differs**, and for a node that moves every frame (a gizmo, a caret, terminal rows) write its own `Node` and add `HostGeometry` at spawn: the skin then leaves the insets of a `placed` node and the lengths of a `Sizing` alone (not a `CardWidth`, an `AspectBox` or a role's own widths), still writes the border, radius, padding and colours, and a skin change does not reset what you wrote.
+
+## Colours you paint by state
+
+`InkFollow` is the colour twin of `HostGeometry`: on a node that has it the skin writes neither the fill nor the edge (whatever the role, state, `Shape` or `InkOverride`), and still writes every other field. Put your colours on the node yourself; take the marker off and the skin paints it again.
+
+## A panel, a card or a placed cluster that is also a flow
+
+A `RowLayout` is honoured on `Panel`, `Surface`, `Card`, `Tone`, `Menu`, `SectionBody`, `Screen`, a `sized` box and a `placed` node (and on the layout containers and a `button_box`), but not on a `Dock`, a split, a table, a list or a text. Its gap is a `LayoutGap` beside it, which replaces the role's own: `(panel(), LayoutGap(0.5), RowLayout { direction: Some(FlexDirection::Row), ..default() })`.
+
+## A layer that takes the pointer
+
+`scrim()` is a full-size layer over its host filled with the skin's scrim colour, what it holds centred, and it **blocks** the pointer (`cover()` lets it through). It is not a dialog: no focus trap, no Escape. Hide it with `Shown(false)`; give it your own `GlobalZIndex`.
+
+## A frame from these parts
+
+A tool's frame is `sized` with `Extent::Vh(100.0)`, a bar and a door strip (a `row` with `GapPx(8.0)`, `Spacing` padding in `Space::Px`, a one-sided `BorderPx` and `InkFollow` if your own system paints it), a body (`fill_region()` with `RowLayout { direction: Some(FlexDirection::Row), .. }`) of docks, a viewport (`fill_column`) and a dock you hide with `Shown(false)`, and a status band. Put `Pickable::IGNORE` on every container the pointer must pass through to the world; `scrim()` is the layer that blocks it. The piece-by-piece mapping is in `docs/research/layout-final.md`.
+
+## An auto size, lines that round up, a display you own
+
+`Extent::Auto` is the content's size. With `TextFlow { grow: Some(1.0), min_width: Some(Extent::Px(0.0)), .. }` beside it, it is how a `split` fills what its sibling leaves, with no `Node` of your own on it:
+
+```rust
+use bevy::prelude::*;
+use bevy_gooey::*;
+
+fn shell(mut commands: Commands) {
+    commands.spawn((
+        row(0.0),
+        children![
+            (sized(Sizing { width: Some(Extent::Px(250.0)), ..default() }), children![label("Sidebar")]),
+            (
+                split(SplitAxis::Horizontal, (panel(), children![label("Map")]), (panel(), children![label("Log")])),
+                Sizing { width: Some(Extent::Auto), height: Some(Extent::Percent(100.0)), ..default() },
+                TextFlow { grow: Some(1.0), min_width: Some(Extent::Px(0.0)), ..default() },
+            ),
+        ],
+    ));
+}
+```
+
+`Extent::LinesCeil(n)` is `n` lines of body text rounded **up** to a whole device pixel, so a least height is never short of its text and follows the text size live (`Extent::Lines(n)` is the same unrounded). `ShownFollow` is the other way round from `Shown`: you keep writing `Node::display` from your own systems and gooey hides the node from focus and drawing while it is `Display::None`, so a panel you open and close with your own `display` is not a tab stop while it is closed. Use `ShownFollow` or `Shown` on a node, not both. A bare `Dock` on your own grid-placed `Node` keeps that placement.
+
+## Starting closed
+
+`Shown::closed()` and `ShownFollow::closed()` are bundles for a node that is closed from the moment it is spawned, with no frame open. `Shown` closes at insertion (a hook), so `commands.spawn((panel(), Shown(false)))` is closed before any system runs. `ShownFollow::closed()` is `(ShownFollow, StartsClosed)`: `StartsClosed` is a one-shot marker that closes the node once and takes itself off, so your later writes of `display` are yours. With `ShownFollow`, a visibility you set while the node is closed is kept when it opens.
+
+## A scrolling column that fills its parent
+
+`scroll_region(gap, gutter, items)` is a column that fills the room its parent leaves, scrolls vertically and shows gooey's rail down its right edge only while the content does not fit. `gap` is in skin gaps, and `gutter` is how much room the rail has: `None` is the list's own lane, `Some(Space::Px(12.0))` is yours (a `ScrollGutter` that is not a number falls back to the default lane).
+
+```rust
+use bevy::prelude::*;
+use bevy_gooey::*;
+
+fn tags(mut commands: Commands) {
+    commands.spawn((
+        column(0.0),
+        children![
+            heading("Tags"),
+            scroll_region(0.5, Some(Space::Px(12.0)), children![label("one"), label("two")]),
+        ],
+    ));
+}
+```
+
+What a region does for you:
+
+- **Focus is followed.** A key, the pad or Tab that moves focus onto a widget in the region scrolls it into view, gliding as a list does, with the next row showing. A click focuses a half-visible widget where it stands (the ring is hidden after a pointer press), and the next key brings it in.
+- **The page keys work.** PageUp and PageDown (and the pad's triggers) move focus a viewport up or down and the region follows, and Home and End go to its first and last widget, as long as the focused widget does not use those keys itself. With Ctrl held they are left to others (Ctrl+PageDown turns a tab page).
+- **A widget that uses the keys keeps them.** A slider, a choice, a rebinding row, a split divider, a tab, a radial menu, a text input, text area or number field, a table or tree, a code editor, a colour area, the command palette, a menu item and a slot take PageUp, PageDown, Home and End themselves, and the region neither scrolls nor moves focus for them. A button, a toggle or a card does not, so the region pages and ends over them. If you add a widget that handles these keys, it has to be added to the one predicate `keeps_nav_keys` in `src/list.rs`, or a region will take the keys from it.
+- **The offset survives a rebuild.** A pane whose rows you replace every frame (a log, a terminal body) puts them in the region's items column, the viewport's first child, and despawns and spawns them in one command flush: the offset is the viewport's own `ScrollPosition`, not the rows'.
+
+The entity `scroll_region` returns is the region; its first child is the viewport and its last child the rail.
+
+## A viewport that is its own region
+
+`scroll_viewport(gap, gutter)` is the same column as **one entity**: the scrolling viewport itself, for a host that puts its own markers on it, spawns its rows as its children and reads `ScrollPosition` on the same entity (a `scroll_region` returns a region whose first child is the viewport, which that cannot be). It behaves as a region does: wheel, drag on the rail, glide and edge fade, focus followed, PageUp, PageDown, Home and End, and the same widgets keeping their keys.
+
+```rust
+use bevy::prelude::*;
+use bevy_gooey::*;
+
+#[derive(Component)]
+struct TagList;
+
+fn tags(mut commands: Commands) {
+    let list = commands.spawn((scroll_viewport(0.5, Some(Space::Px(12.0))), TagList)).id();
+    commands.spawn((button("one"), ChildOf(list)));
+    commands.spawn((column(0.0), children![heading("Tags")])).add_child(list);
+}
+```
+
+- **The rail is a sibling, not a child.** The viewport's `Children` are only yours. Gooey spawns the rail as a child of the viewport's parent, after the viewport, places it over the viewport's right edge each frame and shows it only while the content does not fit; if the rail or its parent is despawned while the viewport lives, a new rail is spawned the next frame. Take `ScrollRail` off the viewport to have none. A query of the parent's `Children` sees the rail beside the viewport, and a sibling you spawn later in the same parent draws above it.
+- **Give the viewport a bounded parent**, such as a column with a height. A row that must keep its height carries `flex_shrink: 0`.
+- **Moving from a hand-built scroll list:** `gap` is skin gaps (`GapPx` is the logical-px gap), the default gutter is the rail's width plus a skin gap (pass `Some(Space::Px(..))` for another lane), the rail is gooey's `ListRail` look rather than a thumb of your own (colour it with `InkOverride` or `InkFollow` on the rail entity, found by `ScrollRailOf`), and a viewport that you move to another parent takes its rail with it.
+
+`cargo run --example scroll` shows both side by side:
+
+![The scroll example: a scroll_region of thirty buttons beside a scroll_viewport that starts on a Volume slider, with the line ScrollPosition.y under it; Tab, Page Down, End and Home move the ring down and back up the region and the column follows; in the right panel Page Down and End scroll the column (the line reads about 130, then about 1230), Home goes back to the slider, and End and Home on the slider set it to 10 and 0 while the column stays put](https://raw.githubusercontent.com/dark-incorporated/bevy_gooey/613537885824a772991d9f1b49786f3d5ab7bc35/docs/media/scroll.gif)
+
+*Scroll regions: the left column is a `scroll_region` and the right a `scroll_viewport`. Page and Home keys move focus and the column follows, and a slider on the viewport keeps Home and End for itself.*
+
+## The parts of a list and a strip
+
+Five more widgets for what a tool's panels are made of between those primitives, each with the look and the sizes from the skin (`cargo run --example kit` shows them):
+
+```rust
+use bevy::prelude::*;
+use bevy::ui::Selected;
+use bevy_gooey::*;
+
+fn kit(mut commands: Commands) {
+    commands.spawn((
+        panel(),
+        children![
+            // A strip the host selects: the edge along the bottom of the selected tab is lit and
+            // no tab moves.
+            (row(0.0), children![(edge_tab("Meshes"), Selected), edge_tab("Tiles")]),
+            // A grouped list's header: a button, full width, shaded on hover like a row.
+            (
+                band(),
+                observe(|_: On<Activate>| info!("fold the group")),
+                children![
+                    (Text::new("v"), Role::ButtonText),
+                    fill_text("kenney_prototype-kit/Models/GLB format"),
+                    count_text("145"),
+                ],
+            ),
+            // A mark too small to press, whose hit area is the skin's target.
+            (row(1.0), children![
+                fill_text("wall.glb"),
+                glyph_button("x", "Remove wall.glb"),
+            ]),
+        ],
+    ));
+}
+```
+
+| part | what it is |
+|---|---|
+| `glyph_button(glyph, name)` | a `button` for a caret or a cross: no padding, and a hit area of `GooeySkin::target()` on each side (a `ControlSize` taller) **whatever the glyph's size**, the glyph centred. `name` is its tooltip and its screen-reader name |
+| `edge_tab(label)` | a tab for a strip the host selects with Bevy's `Selected`: a tab's inset, and a bottom edge that is always there (1.5 line weights) and lit in the accent only on the selected tab, so selecting moves nothing. The selected tab is the surface, the others a button's raised fill. It takes no focus and no Enter: for a strip with keys and pages use `tabs` |
+| `band()` | a full-width row that is a button, a half gap off what is above it, with a button's fill and states: a grouped list's header. Put `Role::ButtonText` marks, `fill_text` and `count_text` in it. Rigid like a `list_row`: as tall as its wrapped text at whatever width it is finally given, even where its host would squeeze it |
+| `fill_text(text)` | a text that grows, gives way to its neighbours (`min_width` 0) and wraps at a word or a letter, so a long name wraps in its own column and never pushes its row out |
+| `count_text(text)` | a text that never shrinks and never wraps: a tally that keeps a column of its own |
+
+A label that follows a point of a 3D view needs no widget of its own: it is a [`WorldAnchor`](world-anchor.md) with `.camera(stage)`, as a child of the pane that stands on the camera's viewport.
+
+## Rules the primitives keep
+
+- **A row narrower than its children shrinks every cell in it by the same share of its width** (`flex_shrink: 1`), so cells give way together and never overlap; an `image_box` never shrinks (`flex_shrink: 0`), so a picture keeps its size and the cells around it take the squeeze. `row` and `column` are as wide as the room they are given and never push out of their host.
+- **The gap is a multiple of `GooeySkin::gap`,** the same value a panel puts between its own children, so `row(1.0)` inside a `panel()` reads as the panel's rhythm. A host that wants a step of `GooeySkin::spacing` passes the multiple.
+- **An overlay's stacked children are absolutely positioned and given the first child's box** by `stack_overlays` (`GooeySystems::Style`, right before `apply_skin`), so they add no room and the overlay is exactly its first child. A child that becomes the first one (the one before it was despawned or moved out) or that leaves the overlay is put back in the flow (`OverlayStacked` goes), so an overlay never ends up a box of nothing. To put something in a corner, nest a node of its own in the overlay.
+- **An `image_box` is `Pickable::IGNORE`,** like every picture: a plot that reads the cursor keeps a wrapper with `RelativeCursorPosition` and `Hovered` on it, and the box inside it.
+
+See the [research note](https://github.com/dark-incorporated/bevy_gooey/blob/613537885824a772991d9f1b49786f3d5ab7bc35/docs/research/layout-primitives.md) for why the gap is `gap` and not a step of `spacing`.

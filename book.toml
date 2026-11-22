@@ -1,5 +1,5 @@
 [book]
-title = "Bevy Coven"
+title = "Dark Incorporated"
 authors = ["Ladvien"]
 language = "en"
 src = "src"
@@ -7,8 +7,9 @@ src = "src"
 [output.html]
 default-theme = "coal"
 preferred-dark-theme = "coal"
-git-repository-url = "https://github.com/bevy-coven/bevy-coven.github.io"
+git-repository-url = "https://github.com/dark-incorporated/dark-incorporated.github.io"
 site-url = "/"
+additional-css = ["theme/dark-inc.css"]
 
 [output.html.redirect]
 "/with-grimoire.html" = "/with-cauldron.html"

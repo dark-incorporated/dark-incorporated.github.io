@@ -1,6 +1,6 @@
 # Using a crate in the Cauldron
 
-[The Cauldron](crates/bevy_grimoire.md) is the coven's editor, where the grimoire a game loads is written. It runs as its own program on your game's project, so the editor never becomes part of your game's build:
+[The Cauldron](crates/bevy_dark_factory/index.md) is the coven's editor, where the grimoire a game loads is written. It runs as its own program on your game's project, so the editor never becomes part of your game's build:
 
 ```sh
 cargo run -p bevy_cauldron -- <game-root> <map> --kit <kit>

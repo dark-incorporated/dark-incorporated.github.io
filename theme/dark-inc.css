@@ -1,0 +1,24 @@
+/* Dark Incorporated: EGA black with cyan and magenta accents. Colours come from STYLE.md in the org's
+   .github repository; change them there first. */
+.coal {
+    --bg: #000000;
+    --fg: #AAAAAA;
+    --sidebar-bg: #000000;
+    --sidebar-fg: #AAAAAA;
+    --sidebar-active: #55FFFF;
+    --links: #55FFFF;
+    --inline-code-color: #FF55FF;
+    --theme-hover: #000055;
+    --quote-bg: #000055;
+    --quote-border: #5500AA;
+    --table-header-bg: #550055;
+    --table-alternate-bg: #000055;
+}
+
+img {
+    image-rendering: pixelated;
+}
+
+.content h1 {
+    border-bottom: 2px solid #AA00AA;
+}

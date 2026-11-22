@@ -4,7 +4,7 @@ Every crate in the family, grouped by what it gives a game. Each picture plays f
 
 ## The grimoire and the Cauldron
 
-### [bevy_grimoire](crates/bevy_grimoire.md)
+### [bevy_grimoire](crates/bevy_dark_factory/index.md)
 
 The grimoire is what a game loads: a library of pieces and a map. The Cauldron is the editor that writes it: it learns a world's grammar from your example and builds more, with the Familiar beside you.
 
@@ -12,31 +12,31 @@ The grimoire is what a game loads: a library of pieces and a map. The Cauldron i
 
 ## World
 
-### [bevy_elements](crates/bevy_elements.md)
+### [bevy_elements](crates/bevy_elements/index.md)
 
 Sky, weather, wind, clouds, terrain and water, simulated in compute shaders.
 
 ![The ten weather presets forced in turn, the clock running from 10.00 h on 20 April 2026](https://github.com/bevy-coven/bevy_elements/raw/HEAD/docs/media/tour_hero.gif)
 
-### [bevy_flora](crates/bevy_flora.md)
+### [bevy_flora](crates/bevy_flora/index.md)
 
 Procedural stylized trees and shrubs that grow over time.
 
 ![A maple growing from a bare trunk into a full crown while the camera circles it](https://github.com/bevy-coven/bevy_flora/raw/HEAD/docs/media/growth.gif)
 
-### [isomesh](crates/isomesh.md)
+### [isomesh](crates/isomesh/index.md)
 
 `isomesh` and `bevy_isomesh`: signed distance fields in, meshes out, with caves and carving.
 
 ![Eight examples at once: a field smooth-unioned into a mushroom, caves and arches, letters thinner than a voxel, one cell meshed two ways, Surface Nets against Marching Cubes, terrain being carved, a ball crossing chunk seams, and a slab blown apart](https://raw.githubusercontent.com/bevy-coven/isomesh/main/docs/media/kitchen-sink.gif)
 
-### [bevy_lights](crates/bevy_lights.md)
+### [bevy_lights](crates/bevy_lights/index.md)
 
 Flickering fires and a budgeted pool of real lights over thousands of virtual ones.
 
 ![Four braziers with real lights of their own and 48 torch-bearers sharing an 8-light pool, their flames leaning back as they walk](https://github.com/bevy-coven/bevy_lights/raw/HEAD/docs/media/showcase.gif)
 
-### [bevy_light_grid](crates/bevy_light_grid.md)
+### [bevy_light_grid](crates/bevy_light_grid/index.md)
 
 An illuminance grid that creature AI can read and follow.
 
@@ -44,25 +44,25 @@ An illuminance grid that creature AI can read and follow.
 
 ## Life
 
-### [bevy_society](crates/bevy_society.md)
+### [bevy_society](crates/bevy_society/index.md)
 
 Villagers with needs, moods, memories, relationships, rumours and factions.
 
 ![A rumor spreads through a village: green tie lines thicken between villagers, one red rivalry line appears, and a magenta ring marks who knows the rumor](https://github.com/bevy-coven/bevy_society/raw/HEAD/docs/media/village.gif)
 
-### [bevy_stigmergy](crates/bevy_stigmergy.md)
+### [bevy_stigmergy](crates/bevy_stigmergy/index.md)
 
 Fading marks on a grid that crowds coordinate through, like ant trails.
 
 ![Ninety foragers find the gap in a wall: a bright amber trail forms between nest and food while older trails fade](https://raw.githubusercontent.com/bevy-coven/bevy_stigmergy/main/docs/foraging.gif)
 
-### [bevy_orca](crates/bevy_orca.md)
+### [bevy_orca](crates/bevy_orca/index.md)
 
 Walkers that steer around each other without colliding.
 
 ![Twenty coloured discs swap sides of a circle through a rotating vortex, without colliding](https://raw.githubusercontent.com/bevy-coven/bevy_orca/main/docs/circle_swap.gif)
 
-### [bevy_speech_bubbles](crates/bevy_speech_bubbles.md)
+### [bevy_speech_bubbles](crates/bevy_speech_bubbles/index.md)
 
 Speech balloons, barks, conversation graphs and a dialog box.
 
@@ -70,7 +70,7 @@ Speech balloons, barks, conversation graphs and a dialog box.
 
 ## Interface
 
-### [bevy_gooey](crates/bevy_gooey.md)
+### [bevy_gooey](crates/bevy_gooey/index.md)
 
 Menus, HUD meters, dialogs and tooltips with keyboard and gamepad navigation.
 
@@ -78,7 +78,7 @@ Menus, HUD meters, dialogs and tooltips with keyboard and gamepad navigation.
 
 ## Spectacle
 
-### [bevy_carnage](crates/bevy_carnage.md)
+### [bevy_carnage](crates/bevy_carnage/index.md)
 
 Wounds that bleed and bodies that break, deterministic to the bit.
 
@@ -86,7 +86,7 @@ Wounds that bleed and bodies that break, deterministic to the bit.
 
 ## Agents and tooling
 
-### [bevy_fairy](crates/bevy_fairy.md)
+### [bevy_fairy](crates/bevy_fairy/index.md)
 
 Lets a coding agent read and drive a running Bevy game.
 

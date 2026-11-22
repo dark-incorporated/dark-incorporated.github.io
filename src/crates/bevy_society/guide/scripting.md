@@ -1,0 +1,161 @@
+<!-- synced from dark-incorporated/bevy_society@233e065; edit it there -->
+# Scripting
+
+Triggers, conversation rules, node effects, interaction conditions and considerations can run Rhai.
+A script reads the society through `ctx`, and writes to it through `fx`.
+
+## What a script sees
+
+Every evaluation gets these constants:
+
+| Name | Type | Meaning |
+|---|---|---|
+| `actor` | `i64` | the event's actor's `PersonId`, or −1 |
+| `target` | `i64` | the event's target's `PersonId`, or −1 |
+| `subject` | `i64` | the rumor subject's `PersonId`, or −1 |
+| `rumor` | `i64` | the rumor's id, or −1 |
+| `accepted` | `bool` | bound **only** on an interaction trigger |
+
+Absent ids are −1 rather than an optional type, so `actor >= 0` is the test. A `PersonId` is what
+`ctx.persons()` returns and what every `ctx` / `fx` call takes; a script never names an entity.
+
+Numbers are `f32` (the engine runs with `f32_float`), so write `0.5`, not `0.5f64`.
+
+## `ctx`: reading the tick-start society
+
+Every `ctx` call reads the snapshot frozen in `Perceive`, so a script sees the society as it stood
+before any of this tick's writes. Names are lowercase strings and an unknown name is a runtime error
+that names it.
+
+| Call | Returns |
+|---|---|
+| `ctx.affinity(a, b)` | liking in `[-1, 1]`; 0 with no tie |
+| `ctx.trust(a, b)` | trust in `[0, 1]`; 0.5 with no tie |
+| `ctx.respect(a, b)` | respect in `[-1, 1]`; 0 with no tie |
+| `ctx.familiarity(a, b)` | familiarity in `[0, 1]` at the tick start; 0 with no tie |
+| `ctx.label(a, b)` | `"stranger"`, `"acquaintance"`, `"friend"` or `"rival"` |
+| `ctx.grudge(a, b)` | weight of `a`'s bad memories about `b`, `[0, 1]`; fades faster the more `a` trusts `b` (`Tuning::forgiveness`) |
+| `ctx.standing(a)` | respect conferred by familiar persons |
+| `ctx.mood(a)` | `#{ p, a, d }` |
+| `ctx.emotion(a, kind)` | summed intensity of one emotion, `[0, 1]` |
+| `ctx.need(a, id)` | a need's level, `[0, 1]` |
+| `ctx.signal(a, id)` | a host-written signal value; `0.0` when the host never wrote it |
+| `ctx.stock(a, good)` | how much of a good `a` holds at the tick start |
+| `ctx.price(good)` | the good's price, read from how full the village's stores are (one tick behind, like every `ctx` read) |
+| `ctx.opinion(a, topic)` | an opinion, `[-1, 1]` |
+| `ctx.trait(a, name)` | a personality trait, `[0, 1]` |
+| `ctx.knows(a, rumor)` | whether `a` knows that rumor |
+| `ctx.tellable(a)` | whether `a` knows a rumor it is still spreading (the condition a gossip gate needs) |
+| `ctx.member(a, faction)` | whether `a` belongs to that faction |
+| `ctx.faction_size(faction)` | how many persons belong to it |
+| `ctx.name(a)` | the person's `Name`, or `"someone"` |
+| `ctx.doing(a)` | the activity's name, `""` when idle |
+| `ctx.position(a)` | where `a` stood at the tick start, a map `#{x, y}` on the society plane (the axes a trigger's `area` uses); an error for a person with no transform |
+| `ctx.distance(a, b)` | plane distance between two persons at the tick start |
+| `ctx.persons()` | every live person's id, ascending |
+| `ctx.hour()` | the hour of the game-day, `[0, 24)` |
+| `ctx.day()` | whole game-days elapsed |
+| `ctx.weekday()` | the weekday, `0` to `6`, counted from `SocietySettings::start_weekday` on game-day 0 |
+| `ctx.rand()` | a uniform draw in `[0, 1)` |
+
+Emotion names are `joy`, `distress`, `hope`, `fear`, `pride`, `shame`, `admiration`, `reproach`,
+`gratitude`, `anger`, `liking`, `disliking`. Trait names are `openness`, `conscientiousness`,
+`extraversion`, `agreeableness`, `neuroticism`.
+
+## `fx`: queuing writes
+
+`fx` never touches the world. Each call queues an action; one exclusive system applies the queue after
+`Rules`, once per tick. A script that fails applies **none** of its actions.
+
+| Call | Effect |
+|---|---|
+| `fx.adjust(a, b, field, delta)` | moves a tie value; `field` is `affinity`, `trust`, `respect` or `familiarity` |
+| `fx.emote(a, kind, intensity)` | appraises an emotion |
+| `fx.need(a, id, delta)` | moves a need, clamped to `[0, 1]` |
+| `fx.opinion(a, topic, delta)` | moves an opinion, clamped to `[-1, 1]` |
+| `fx.join(a, faction)` / `fx.leave(a, faction)` | changes a membership |
+| `fx.rumor(origin, subject, deed, truth)` | starts a rumor, known by `origin` at full belief |
+| `fx.interact(a, b, interaction)` | writes `Interact`, resolved next tick |
+| `fx.bark(a, text)` / `fx.think(a, text)` | writes `SocietyBark` |
+| `fx.remember(a, b, text, valence, importance)` | records a `Custom` memory; `b` may be `-1` |
+| `fx.converse(npc, player)` | opens a conversation (needs the `dialogue` feature) |
+| `fx.emit(name, data_map)` | writes `ScriptEvent` with the event's `actor` and `target` |
+
+Clamps follow the model: affinity and respect to `[-1, 1]`, trust to `[0, 1]`. A familiarity delta
+moves the familiarity **peak** and restamps the contact, so `ctx.familiarity` reads at least the
+clamped peak on the next tick.
+
+`fx.emit`'s payload may contain only booleans, integers, floats and strings. Any other Rhai type is a
+runtime error at `emit` time, so a script cannot smuggle a struct into a game event.
+
+## Writing a trigger
+
+```ron
+(
+    id: "watch_stops_theft",
+    on: NormViolated("steal"),
+    if: Some("ctx.member(actor, \"watch\")"),
+    then: "fx.bark(actor, \"Stop, thief!\")",
+)
+```
+
+A condition that fails to evaluate counts as **false** and writes a `ScriptError`; it does not stop the
+other triggers.
+
+Each trigger that runs to completion writes `TriggerFired { trigger, actor, target }` (the authored id and the
+people the event bound), in the order the triggers ran. A trigger whose `then` errors writes `ScriptError`
+instead.
+
+### Editing a running society
+
+`reload_defs(world, file)` swaps an edited `DefsFile` into a running society, so a trigger script, an activity's considerations or an interaction's effects change without a restart. Ids already in the world index the needs, signals, skills, goods, topics, deeds, factions, activities and interactions lists, so those must stay name-for-name the same; a file that adds, drops or reorders one, or does not compile, is refused with an error and the society keeps its last good defs. A trigger that keeps its `id` keeps its `once` and cooldown state; a renamed or new one starts clean. Call it between updates, not from a system.
+
+## Errors and limits
+
+Every evaluation runs sandboxed: 10 000 operations, 16 call levels, 1 KiB strings, 256-element arrays
+and 64-entry maps. A script that exceeds a limit fails rather than hanging the tick.
+
+A failure — a runtime error, a wrong return type, or the operation limit — logs
+`bevy_society: script <owner> failed: <message>` and writes `ScriptError { owner, message }`. A failed
+condition counts as false, a failed consideration scores 0, and a failed effect applies none of its
+queued actions.
+
+### Checking text before it is saved
+
+`check_script(source, ScriptKind::Expression | ScriptKind::Statements)` parses script text under the same limits as the definitions compiler, without a `DefsFile` or an app, and returns `ScriptSyntaxError { line, column, message }` for the first syntax error. An editor calls it on every edit and refuses to save text that fails. It evaluates nothing: an unknown function is found only when the script runs.
+
+## Firing your own events
+
+Write a message:
+
+```rust,ignore
+app.world_mut().write_message(FireTrigger {
+    name: "poke".to_owned(),
+    actor: Some(villager),
+    target: None,
+});
+```
+
+and the `Custom("poke")` triggers run, with `actor` bound. `FireTrigger` is drained on every fixed
+step, so a game may write it from `Update`.
+
+## When triggers run
+
+Events are reported in a fixed order, so the same inputs give the same society:
+
+1. `Tick`, actor −1.
+2. `Hour(h)` for every trigger whose hour lies in the game time since the previous tick, wrap-aware,
+   actor −1. Fractional hours work: `Hour(5.5)` fires when the clock passes 05:30. A host clock that
+   jumps from 05:00 to 06:00 in one frame still fires an `Hour(5.5)` trigger exactly once, and a clock
+   that goes backward fires nothing — the hours it recrosses on the way back were already crossed going
+   forward. The baseline is the clock's start instant (`start_hour`, or the first `HostClock` value), so
+   a trigger standing at the start hour does not fire on the first tick.
+3. Queued events (interactions, activities, dialogue nodes), in push order.
+4. `TieLabelChanged`, in message order.
+5. `NormViolated`, actor = actor, target = witness.
+6. `NeedBelow`, persons in id order and needs in id order.
+7. `RumorReach`, rumors in id order, the first time a living rumor of that deed reaches its fraction.
+
+Within one event, triggers are evaluated in definition order. `NeedBelow` fires once per person per
+crossing: that person re-arms only once their need is back above `below + 0.05`, so a level hovering
+at the threshold does not fire every tick, and one person's level never arms the line for another.

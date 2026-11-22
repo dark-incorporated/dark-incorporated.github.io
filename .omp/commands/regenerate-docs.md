@@ -753,6 +753,17 @@ recaptured rows, its compile-gate result and its reviewer verdict. The summary t
 block sit above them, under `## Summary`. A section that is not going to be published says `excluded:
 <why>` on its first line, which is what `publish` reads.
 
+Add a last section, `## Owner actions on the org page`, which `publish` copies into its closing output.
+GitHub has no API for the org's picture or its pinned repositories, so the report lists what the owner
+does by hand at `https://github.com/organizations/dark-incorporated/settings/profile`:
+
+- upload the picked `profile/avatar.png` (from the `avatar` job) as the organisation picture;
+- pin up to six repositories on `https://github.com/dark-incorporated`, in this order: `bevy_dark_factory`,
+  then the next five in `crates.json` order (`bevy_gooey`, `bevy_elements`, `bevy_flora`, `isomesh`,
+  `bevy_lights`), or the owner's own choice.
+
+State the avatar's picked `k` and its sheet path, so the owner uploads the file that was reviewed.
+
 ---
 
 ## Mode `publish <run-id>`
@@ -850,6 +861,23 @@ done
      --description "The Dark Incorporated book: how the crates fit together"
    ```
 
+   The organisation's own page, `https://github.com/dark-incorporated`, takes its description and website
+   from the API. Its name (`Dark Inc.`) is the owner's and is left alone. The description is the profile
+   README's first-sentence idea in under 160 characters:
+
+   ```sh
+   gh api -X PATCH orgs/dark-incorporated \
+     -f description="An agent-first game editor and the Bevy crates around it: gothic industrial, neon cyberpunk, 80s pixel art." \
+     -f blog="https://dark-incorporated.github.io/"
+   ```
+
+   The profile body itself (banner, intro, family table) is `profile/README.md` in `.github`, which ships
+   in that repo's PR, so it appears on the org page only once the owner merges that PR. After the merge,
+   check the live page: `gh api orgs/dark-incorporated --jq '[.name,.description,.blog]'` returns the
+   values above, and a browser screenshot of `https://github.com/dark-incorporated` shows the new banner
+   and the generated family table. The avatar and the pinned repositories are the owner's actions listed
+   in `REPORT.md`.
+
 5. **The one label rename** (`names.json` `labels`). For each `[old, new]` pair, and each repo where
    the OLD label still exists, rename it in place — the old value on the left is what we migrate from:
 
@@ -880,7 +908,8 @@ done
 
    `--remove-topic` on a repo that does not carry it is ignored by `gh`, so this is safe to repeat.
 
-7. Print every PR URL, then stop. **Never merge.**
+7. Print every PR URL, then print the `## Owner actions on the org page` section of `REPORT.md`
+   (`section "Owner actions on the org page"`), then stop. **Never merge.**
 
 ---
 
